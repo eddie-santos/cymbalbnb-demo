@@ -102,32 +102,6 @@ var DebugListings = []Listing{
 	},
 }
 
-func (cl ListingCategory) MarshalJSON() ([]byte, error) {
-	return json.Marshal(string(cl))
-}
-
-func (cl *ListingCategory) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
-		return err
-	}
-	switch s {
-	case string(UnspecifiedListing):
-		*cl = UnspecifiedListing
-	case string(HouseListing):
-		*cl = HouseListing
-	case string(ApartmentListing):
-		*cl = ApartmentListing
-	case string(SharedRoomsListing):
-		*cl = SharedRoomsListing
-	case string(CabinListing):
-		*cl = CabinListing
-	default:
-		return &json.UnsupportedValueError{}
-	}
-	return nil
-}
-
 var yesValues = []string{"1", "y", "Y", "yes", "Yes", "YES"}
 
 func localDebuggingEnabled() bool {
