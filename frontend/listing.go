@@ -37,6 +37,7 @@ type Listing struct {
 	Images          []Image           `json:"images"`
 	FrontPictureURI string            `json:"frontPictureUri"`
 	VideoURI        string            `json:"videoUri"`
+	featured        bool
 }
 
 type Image struct {
@@ -111,20 +112,20 @@ func (cl *ListingCategory) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &s); err != nil {
 		return err
 	}
-	switch s {
-	case string(UnspecifiedListing):
+	if s == string(UnspecifiedListing) {
 		*cl = UnspecifiedListing
-	case string(HouseListing):
+	} else if s == string(HouseListing) {
 		*cl = HouseListing
-	case string(ApartmentListing):
+	} else if s == string(ApartmentListing) {
 		*cl = ApartmentListing
-	case string(SharedRoomsListing):
+	} else if s == string(SharedRoomsListing) {
 		*cl = SharedRoomsListing
-	case string(CabinListing):
+	} else if s == string(CabinListing) {
 		*cl = CabinListing
-	default:
-		return &json.UnsupportedValueError{}
+	} else {
+		return fmt.Errorf("unknown listing category: %s", s)
 	}
+
 	return nil
 }
 
