@@ -43,6 +43,7 @@ func run(ctx context.Context, getenv func(string) string) error {
 		Addr:    net.JoinHostPort(config.Host, config.Port),
 		Handler: ChainMiddleware(srv, SessionIDMiddleware, RequestIDMiddleware),
 	}
+	slog.InfoContext(ctx, "HERE")
 	go func() {
 		slog.InfoContext(ctx, "starting web server", slog.String("address", httpServer.Addr))
 		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
