@@ -23,6 +23,7 @@ import (
 type Config struct {
 	Host              string
 	InstanceId        string
+	DatabaseURL       string
 	Location          string
 	Port              string
 	ProjectId         string
@@ -45,6 +46,7 @@ func NewConfig(ctx context.Context, getenv func(string) string) *Config {
 	return &Config{
 		Host:              "",
 		InstanceId:        utils.StringOnly(utils.InstanceId(ctx)),
+		DatabaseURL:       utils.DatabaseURL(utils.DBPassword(ctx)),
 		Location:          utils.StringOnly(utils.Region(ctx)),
 		Port:              utils.GetStringParam("port", "PORT", "8080"),
 		ProjectId:         utils.StringOnly(utils.ProjectID(ctx)),
