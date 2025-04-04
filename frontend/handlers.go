@@ -68,7 +68,7 @@ func (s *FrontendServer) Default(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for i, listing := range listings {
+	for _, listing := range listings {
 		if listing.Price > 250.0 {
 			listing.featured = true
 		}

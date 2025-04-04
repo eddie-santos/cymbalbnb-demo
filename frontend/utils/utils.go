@@ -103,6 +103,12 @@ func FormatServiceName(ctx context.Context, n string) string {
 	return fmt.Sprintf("https://%s-%s.%s.run.app", n, StringOnly(ProjectNumber(ctx)), StringOnly(Region(ctx)))
 }
 
+func DBPassword(ctx context.Context) string {
+	// dbPassword :=getenvFunc("DBPassword")
+	dbPassword := "password123" // TODO: revert before committing
+	return dbPassword
+}
+
 func DatabaseURL(dbPassword string) string {
 	return fmt.Sprintf(databaseURL, dbPassword)
 }

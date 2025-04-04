@@ -99,10 +99,6 @@ func IDToken(ctx context.Context, aud string) (string, error) {
 	return accessToken, err
 }
 
-func DBPasword(ctx context.Context) string {
-	return GetEnv("DB_PASSWORD", "password123")
-}
-
 func ServiceName() string {
 	return GetEnv("K_SERVICE", "Unknown")
 }

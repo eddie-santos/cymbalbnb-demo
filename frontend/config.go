@@ -46,7 +46,7 @@ func NewConfig(ctx context.Context, getenv func(string) string) *Config {
 	return &Config{
 		Host:              "",
 		InstanceId:        utils.StringOnly(utils.InstanceId(ctx)),
-		DatabaseURL:       utils.DatabaseURL("password123"),
+		DatabaseURL:       utils.DatabaseURL(utils.DBPassword(ctx)),
 		Location:          utils.StringOnly(utils.Region(ctx)),
 		Port:              utils.GetStringParam("port", "PORT", "8080"),
 		ProjectId:         utils.StringOnly(utils.ProjectID(ctx)),
