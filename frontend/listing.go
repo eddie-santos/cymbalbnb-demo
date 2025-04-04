@@ -18,6 +18,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -159,6 +160,7 @@ func listing(ctx context.Context, serviceURI string, id string) (Listing, error)
 	if localDebuggingEnabled() {
 		for _, l := range DebugListings {
 			if l.Id == id {
+				log.InfoContextf(ctx, "Listing %s found in local debugging mode", id)
 				return l, nil
 			}
 		}
@@ -176,5 +178,7 @@ func listing(ctx context.Context, serviceURI string, id string) (Listing, error)
 	if err := json.Unmarshal(data, &l); err != nil {
 		return Listing{}, err
 	}
-	return l, err
+	log.InfoContextf(ctx, "Listing %s found in service: %s", id, serviceURI)
+
+	return l, nil
 }
