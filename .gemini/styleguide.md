@@ -9,7 +9,7 @@ code contained in this repository. For other languages, please follow industry l
 2. Ensure consistent visibility for fields within a struct; avoid mixing exported (uppercase) and
    unexported (lowercase) fields.
 
-3. Ensure any new Golang file (i.e. `*.go files`) starts with the following Apache License comment as a header:
+3. Ensure any new Golang file (i.e. `*.go` files) starts with the following Apache License comment as a header:
 
 ```
 // Copyright 2025 Google LLC
