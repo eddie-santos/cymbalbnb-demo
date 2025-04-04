@@ -143,6 +143,7 @@ func listings(ctx context.Context, serviceURI string) ([]Listing, error) {
 	if err != nil {
 		return []Listing{}, err
 	}
+	fmt.Printf("*** TEMP DEBUG: %s", uri)
 	data, err := utils.RestCall(ctx, uri, http.MethodGet, []byte{})
 	if err != nil {
 		return []Listing{}, err
