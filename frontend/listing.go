@@ -18,6 +18,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -37,6 +38,7 @@ type Listing struct {
 	Images          []Image           `json:"images"`
 	FrontPictureURI string            `json:"frontPictureUri"`
 	VideoURI        string            `json:"videoUri"`
+	featured        bool
 }
 
 type Image struct {
@@ -102,6 +104,32 @@ var DebugListings = []Listing{
 	},
 }
 
+func (cl ListingCategory) MarshalJSON() ([]byte, error) {
+	return json.Marshal(string(cl))
+}
+
+func (cl *ListingCategory) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err != nil {
+		return err
+	}
+	if s == string(UnspecifiedListing) {
+		*cl = UnspecifiedListing
+	} else if s == string(HouseListing) {
+		*cl = HouseListing
+	} else if s == string(ApartmentListing) {
+		*cl = ApartmentListing
+	} else if s == string(SharedRoomsListing) {
+		*cl = SharedRoomsListing
+	} else if s == string(CabinListing) {
+		*cl = CabinListing
+	} else {
+		return fmt.Errorf("unknown listing category: %s", s)
+	}
+
+	return nil
+}
+
 var yesValues = []string{"1", "y", "Y", "yes", "Yes", "YES"}
 
 func localDebuggingEnabled() bool {
@@ -116,6 +144,7 @@ func listings(ctx context.Context, serviceURI string) ([]Listing, error) {
 	if err != nil {
 		return []Listing{}, err
 	}
+	fmt.Printf("*** TEMP DEBUG: %s", uri)
 	data, err := utils.RestCall(ctx, uri, http.MethodGet, []byte{})
 	if err != nil {
 		return []Listing{}, err
@@ -131,6 +160,7 @@ func listing(ctx context.Context, serviceURI string, id string) (Listing, error)
 	if localDebuggingEnabled() {
 		for _, l := range DebugListings {
 			if l.Id == id {
+				log.InfoContextf(ctx, "Listing %s found in local debugging mode", id)
 				return l, nil
 			}
 		}
@@ -148,5 +178,7 @@ func listing(ctx context.Context, serviceURI string, id string) (Listing, error)
 	if err := json.Unmarshal(data, &l); err != nil {
 		return Listing{}, err
 	}
-	return l, err
+	log.InfoContextf(ctx, "Listing %s found in service: %s", id, serviceURI)
+
+	return l, nil
 }
